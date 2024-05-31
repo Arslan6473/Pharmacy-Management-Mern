@@ -1,15 +1,17 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentUser } from '../auth/authSlice'
 import { FaUser } from "react-icons/fa";
-import { selectAllBills } from '../bill/billSlice';
+import { fetchAllBillsAsync, selectAllBills } from '../bill/billSlice';
 
 function User() {
     const user = useSelector(getCurrentUser)
     const bills = useSelector(selectAllBills)
-
+    const dispatch = useDispatch()
     const totalSales = bills &&  bills.reduce((amount, bill) => bill.totalAmount + amount, 0);
-
+    useEffect(()=>{
+        dispatch(fetchAllBillsAsync())
+    },[dispatch])
     return (
         <div>
             <div class="group before:hover:scale-95   before:hover:w-80 before:hover:h-44 before:hover:rounded-b-2xl before:transition-all before:duration-500 before:content-[''] before:w-80 before:h-24 before:rounded-t-2xl before:bg-gradient-to-bl from-sky-200 via-orange-200 to-orange-700 before:absolute before:top-0 w-full h-80 relative bg-slate-50 flex flex-col items-center justify-center gap-2 py-3 text-center overflow-hidden">

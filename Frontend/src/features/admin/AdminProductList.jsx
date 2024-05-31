@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { addToCartAsync, selectAllCartItems } from '../cart/cartSlice';
 import { fetchFilterProductsAsync, selectAllproducts, selectProductsStatus } from '../product/productSlice';
 import Pagination from '../common/Pagination';
 import Loader from '../common/Loader';
-import { getCurrentUser } from '../auth/authSlice';
 import { Link } from 'react-router-dom';
 
 function ProductList() {
@@ -15,34 +12,12 @@ function ProductList() {
   const [search, setSearch] = useState("")
 
   const dispatch = useDispatch()
-  const user = useSelector(getCurrentUser);
   const products = useSelector(selectAllproducts)
   const status = useSelector(selectProductsStatus)
-  const cartItems = useSelector(selectAllCartItems)
   const handlePage = (page) => {
     setPage(page)
   }
   
-  const notifyAddProduct = () => toast.success("Added to Bill", {
-    position: "top-center",
-    autoClose: 2000,
-    theme: "light",
-  });
-  const notifyProductAlready = () => toast.error("Already added to Bill", {
-    position: "top-center",
-    autoClose: 2000,
-    theme: "light",
-  });
-  const handleCart = (e,product) => {
-    if (cartItems.findIndex((cartItem) => cartItem.item._id === product._id) < 0) {
-      const newProduct = {  item: product._id, user:user._id };
-      dispatch(addToCartAsync(newProduct))
-      notifyAddProduct()
-    } else {
-      notifyProductAlready()
-    }
-
-  }
   useEffect(() => {
     const pagination = { _page: page, _per_page: 12}
     const searchQuery ={_search : search}
@@ -108,19 +83,19 @@ function ProductList() {
                     <div className="text-white font-medium">Rs: {product.price}</div>
                   </div>
                 </div>
+                <Link to={`/admin/edit-product/${product._id}`}>
                 <button
-                  onClick={(e) => handleCart(e, product)}
                   type="button"
                   className="mt-3 text-blue-600 bg-white h-10 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
                 >
                   Edit
                 </button>
+                </Link>
               </div>
             </div>
           </div>
         ))
       )}
-      <ToastContainer/>
       <Pagination handlePage={handlePage} page={page}/>
     </>
   );
