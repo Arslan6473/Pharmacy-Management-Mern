@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { createBill, fetchAllBills } from "./billApi";
+import { createBill, fetchAllBills, fetchTotalDataBills } from "./billApi";
 
 const initialState = {
   bills: [],
+  allBills :[],
   status: "idle",
 };
 
@@ -18,6 +19,13 @@ export const fetchAllBillsAsync = createAsyncThunk(
   "bill/fetchAllBills",
   async ({pagination,searchQuery}) => {
     const response = await fetchAllBills(pagination,searchQuery);
+    return response.data;
+  }
+);
+export const fetchTotalDataBillsAsync = createAsyncThunk(
+  "bill/fetchAllDataBills",
+  async () => {
+    const response = await fetchTotalDataBills();
     return response.data;
   }
 );
@@ -42,10 +50,19 @@ const billSlice = createSlice({
         state.bills = action.payload;
         state.status = "idle";
       })
+      .addCase(fetchTotalDataBillsAsync.pending, (state ,action) => {
+        state.status = "Loading";
+      })
+      .addCase(fetchTotalDataBillsAsync.fulfilled, (state, action) => {
+        state.allBills = action.payload;
+        state.status = "idle";
+      })
     },
   });
 
 export const selectAllBills = (state) => state.bill.bills;
+export const selectToatalBillsData = (state) => state.bill.allBills;
+
 export const selectBillsStatus = (state) => state.bill.status;
 
 

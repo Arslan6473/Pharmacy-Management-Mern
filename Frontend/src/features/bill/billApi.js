@@ -35,3 +35,17 @@ export const fetchAllBills = (pagination,search) => {
     }
   });
 };
+
+export const fetchTotalDataBills = () => {
+  
+
+  return new Promise(async (resolve) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/bills/all-bills`);
+      resolve({ data: response.data });
+    } catch (error) {
+      console.error(error);
+      resolve({ data: null, error: error });
+    }
+  });
+};

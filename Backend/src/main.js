@@ -13,6 +13,8 @@ app.use(
 app.use(Express.json({ limit: "16kb" }));
 app.use(Express.urlencoded({ limit: "16kb", extended: true }));
 app.use(Express.static("public"));
+app.use(Express.static("dist"));
+
 app.use(cookieParser());
 
 // import Routes

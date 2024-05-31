@@ -2,15 +2,16 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCurrentUser } from '../auth/authSlice'
 import { FaUser } from "react-icons/fa";
-import { fetchAllBillsAsync, selectAllBills } from '../bill/billSlice';
+import {  fetchTotalDataBillsAsync, selectToatalBillsData } from '../bill/billSlice';
 
 function User() {
     const user = useSelector(getCurrentUser)
-    const bills = useSelector(selectAllBills)
+    const bills = useSelector(selectToatalBillsData)
     const dispatch = useDispatch()
+
     const totalSales = bills &&  bills.reduce((amount, bill) => bill.totalAmount + amount, 0);
     useEffect(()=>{
-        dispatch(fetchAllBillsAsync())
+        dispatch(fetchTotalDataBillsAsync())
     },[dispatch])
     return (
         <div>

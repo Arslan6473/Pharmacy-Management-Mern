@@ -53,4 +53,17 @@ const fetchFilteredBills = asyncHandler(async (req, res) => {
   return res.status(200).json(bills);
 });
 
-export { createBill, fetchFilteredBills };
+const fetchAllBills = asyncHandler(async (req, res) => {
+
+
+  const bills = await Bill.find({});
+
+
+  if (!bills.length) {
+    return res.status(500).json({ message: "Something went wrong while fetching bills" });
+  }
+
+  return res.status(200).json(bills);
+});
+
+export { createBill, fetchFilteredBills,fetchAllBills };
